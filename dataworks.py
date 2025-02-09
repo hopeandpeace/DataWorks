@@ -27,6 +27,24 @@ def install_uv_and_run_datagen(user_email: str):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+def format_markdown_file():
+    """
+    Formats /data/format.md using Prettier.
+    """
+    try:
+        file_path = Path("data/format.md")
+        
+        if not file_path.exists():
+            return {"status": "error", "message": "File not found: /data/format.md"}
+        
+        # Run Prettier to format the file
+        subprocess.run(["npx.cmd", "prettier", "--write", str(file_path)], check=True)
+
+        return {"status": "success", "message": "Markdown file formatted successfully"}
+    
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
 @app.post("/run")
 async def run_task(task: str):
     """
@@ -42,6 +60,10 @@ async def run_task(task: str):
         if "install uv" in task.lower() and "datagen.py" in task.lower():
             user_email = "your_email@example.com"  # Replace with actual email if needed
             result = install_uv_and_run_datagen(user_email)
+            return result
+
+        if "format" in task.lower() and "markdown" in task.lower():
+            result = format_markdown_file()
             return result
 
         return {"status": "success", "message": f"Task '{task}' executed"}
