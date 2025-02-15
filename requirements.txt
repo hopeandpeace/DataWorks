@@ -3,4 +3,3 @@ uvicorn
 requests
 easyocr
 Pillow
-sqlite3
